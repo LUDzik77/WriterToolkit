@@ -25,6 +25,35 @@ mycursor = db.cursor()
 #mycursor.execute("SELECT id, name FROM Test WHERE gender = 'M' ORDER BY id DESC")
 #mycursor.execute("ALTER TABLE Test ADD COLUMN food VARCHAR(50) NOT NULL")
 #mycursor.execute("ALTER TABLE name first_name VARCHAR(50)")
-for x in mycursor:
-   print(x)
 
+
+#Querry1 = "CREATE TABLE Users (id int PRIMARY KEY AUTO_INCREMENT, name VARCHAR(50), passwd VARCHAR(50))"
+#Querry2 = "CREATE TABLE Scores (userid int PRIMARY KEY, FOREIGN KEY(userID) REFERENCES Users(id), game1 int DEFAULT 0, game2 int DEFAULT 0)"
+#mycursor.execute(Querry1)
+#mycursor.execute(Querry2)
+#mycursor.execute("SHOW TABLES")
+#for x in mycursor:
+   #print(x)
+   
+#users =[("Ludwik", "Ludwik123"),
+    #("Diana", "MarynarzTeam"),
+    #("Leon", "Leo"),
+    #("Dalia", "Flower")]
+
+#user_scores =[(40,100), (20,200), (40,120), (10,20)]
+    
+#mycursor.executemany("INSERT INTO Users (name, passwd) VALUES (%s, %s)", users)
+#Querry3 = "INSERT INTO Users (name, passwd) VALUES (%s, %s)"
+#Querry4 = "INSERT INTO Scores (userId, game1, game2) VALUES (%s,%s,%s)"
+#for x, user in enumerate(users):
+    #mycursor.execute(Querry3, user)
+    #last_id = mycursor.lastrowid
+    #mycursor.execute(Querry4,(last_id,) + user_scores[x])
+#db.commit()
+
+mycursor.execute("SELECT * FROM USERS")
+for x in mycursor:
+    print(x)
+mycursor.execute("SELECT COLUMN_NAME from information_schema.columns")
+for x in mycursor:
+    print(x)
