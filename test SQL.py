@@ -9,6 +9,7 @@ db = mysql.connector.connect(
 
 mycursor = db.cursor()
 
+
 #useful mysql related code snippets:
 #mycursor.execute("CREATE DATABASE testdatabase")
 #mycursor.execute("CREATE TABLE Person(name VARCHAR(50), age smallint UNSIGNED, personID int PRIMARY KEY AUTO_INCREMENT)")
@@ -51,9 +52,8 @@ mycursor = db.cursor()
     #mycursor.execute(Querry4,(last_id,) + user_scores[x])
 #db.commit()
 
+#mycursor.execute("SELECT COLUMN_NAME from information_schema.columns")
 mycursor.execute("SELECT * FROM USERS")
 for x in mycursor:
     print(x)
-mycursor.execute("SELECT COLUMN_NAME from information_schema.columns")
-for x in mycursor:
-    print(x)
+
