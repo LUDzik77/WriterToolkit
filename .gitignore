@@ -4,3 +4,4 @@ GIT ignore list
 temp/
 /test SQL.py
 /WTcredentials.py
+/_pychache_
