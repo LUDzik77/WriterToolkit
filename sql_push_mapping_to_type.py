@@ -1,5 +1,6 @@
 import mysql.connector
 from datetime import datetime
+import WTcredentials
 
 db = mysql.connector.connect(
     host = "localhost",

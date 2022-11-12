@@ -1,8 +1,6 @@
-# ignore ALL .log files
+GIT ignore list
+
 /*.log
-
-# ignore ALL files in ANY directory named temp
 temp/
-
-
 /test SQL.py
+/WTcredentials.py
