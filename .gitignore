@@ -1,7 +1,8 @@
-GIT ignore list
+#GIT ignore list:
 
 /*.log
 temp/
 /test SQL.py
 /WTcredentials.py
 /_pychache_
+/test*.*

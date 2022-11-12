@@ -3,10 +3,10 @@ from datetime import datetime
 import WTcredentials
 
 db = mysql.connector.connect(
-    host = "localhost",
-    user = "Ludwik",
-    passwd = "Ludwik",
-    database= "storytool_test")
+    host = WTcredentials.host,
+    user = WTcredentials.user,
+    passwd = WTcredentials.passwd,
+    database= WTcredentials.database)
 
 mycursor = db.cursor()
 

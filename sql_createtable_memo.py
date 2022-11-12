@@ -28,7 +28,7 @@ CREATE TABLE `character` (
   `first_name` varchar(45) DEFAULT 'NOT NULL',
   `family_name` varchar(45) DEFAULT NULL,
   `nickname` varchar(45) DEFAULT NULL,
-  `pricipal` tinyint(1) DEFAULT '0',
+  `principal` tinyint(1) DEFAULT '0',
   `narrative` mediumtext,
   `description` mediumtext,
   `saying` varchar(45) DEFAULT NULL,
