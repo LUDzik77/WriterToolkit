@@ -29,10 +29,12 @@ CREATE TABLE `character` (
   `family_name` varchar(45) DEFAULT NULL,
   `nickname` varchar(45) DEFAULT NULL,
   `principal` tinyint(1) DEFAULT '0',
-  `narrative` mediumtext,
   `description` mediumtext,
-  `saying` varchar(45) DEFAULT NULL,
   `gender` int DEFAULT '0',
+  `skill` varchar(45) DEFAULT NULL,
+  `idea` varchar(45) DEFAULT NULL,
+  `saying` varchar(45) DEFAULT NULL,
+  `narrative` mediumtext,
   PRIMARY KEY (`character_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
