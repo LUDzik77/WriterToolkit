@@ -3,5 +3,6 @@
 /*.log
 temp/
 /WTcredentials.py
+/IWT_main.py
 /_pychache_
 /test*.*
