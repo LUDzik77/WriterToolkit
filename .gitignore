@@ -4,6 +4,5 @@
 temp/
 /WTcredentials.py
 /IWT_main.py
-/_pychache_
-_pychache_
+__pychache__/
 /test*.*
