@@ -30,9 +30,6 @@ def csv_format_check(csvfile):
     else: print("Correct format of the file")
 #csv_format_check("testADD_CHARACTERS.csv")    
 
-def enter_characters(csvfile):
-    pass
-
 def read_csv(csvfile):
     with open(csvfile, 'r', encoding='utf-8') as file:
         content = csv.reader(file)
@@ -41,38 +38,57 @@ def read_csv(csvfile):
         for row in content:
             output.append(row)
     return(headings, output)
-
 lines_to_verify = read_csv("testADD_CHARACTERS.csv")
 #print(lines_to_verify[0])
 #print(*lines_to_verify[1])
 
-"""
-SELECT `COLUMN_NAME` 
-FROM `INFORMATION_SCHEMA`.`COLUMNS` 
-WHERE `TABLE_SCHEMA`='yourdatabasename' 
-    AND `TABLE_NAME`='yourtablename';
-"""
+
+def enter_characters(csvfile):
+    pass
 
 
-'''
-INSERT INTO `storytool_test`.`character`
-(`character_id`,
-`first_name`,
-`family_name`,
-`nickname`,
-`principal`,
-`narrative`,
-`description`,
-`saying`,
-`gender`)
-VALUES
-(<{character_id: }>,
-<{first_name: NOT NULL}>,
-<{family_name: }>,
-<{nickname: }>,
-<{pricipal: 0}>,
-<{narrative: }>,
-<{description: }>,
-<{saying: }>,
-<{gender: 0}>);
-'''
+
+
+
+#sql_query = """
+#INSERT INTO `storytool_test`.`character`
+#(`character_id`,
+#`first_name`,
+#`family_name`,
+#`nickname`,
+#`principal`,
+#`description`,
+#`gender`,
+#`skill`,
+#`idea`,
+#`saying`,
+#`narrative`)
+#VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);
+#"""
+#sql_values = lines_to_verify[1][0]
+#print(lines_to_verify[1][0][1:])
+#mycursor.execute(sql_query, sql_values)
+#db.commit()
+
+
+#TEST --->WORKS fine
+#sql_query = """
+#INSERT INTO `storytool_test`.`character`
+#(
+#`first_name`,
+#`family_name`,
+#`nickname`,
+#`principal`,
+#`description`,
+#`gender`,
+#`skill`,
+#`idea`,
+#`saying`,
+#`narrative`)
+#VALUES ('Ludwik', 'Papaj', 'LUDzik', 1, '', 1, 'coding', 'capitalist', 'Allright', '');
+#"""
+#mycursor.execute(sql_query)
+#db.commit()
+
+
+
