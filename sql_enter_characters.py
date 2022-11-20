@@ -1,7 +1,7 @@
 import mysql.connector
-from datetime import datetime
 import WTcredentials
 import csv
+#from functools import reduce
 
 db = mysql.connector.connect(
     host = WTcredentials.host,
@@ -11,25 +11,24 @@ db = mysql.connector.connect(
 
 mycursor = db.cursor()
 
-#sql_query = "INSERT INTO mapping_to_type VALUES (%s)"
-#sql_query = ("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS"
-#"WHERE TABLE_SCHEMA=(%s) AND TABLE_NAME=(%s);")
-#sql_values = ('storytool_test', 'character')
-#mycursor.execute(sql_query, sql_values)
+#to verify the basic excel spreeedsheet have columns as per  database
+def get_columns_names(table_name):
+    sql_query  =  """
+    SELECT COLUMN_NAME
+    FROM `INFORMATION_SCHEMA`.`COLUMNS`
+    WHERE `TABLE_SCHEMA` = (%s)
+    AND `TABLE_NAME` = (%s)
+    """
+    sql_values = (db.database, table_name)
+    mycursor.execute(sql_query, sql_values)
+    return([a[0] for a in list(mycursor)])
+#print(get_columns_names('character'))
 
-
-sql_query  =  """
-SELECT COLUMN_NAME
-FROM `INFORMATION_SCHEMA`.`COLUMNS`
-WHERE `TABLE_SCHEMA` = 'storytool_test'
-AND `TABLE_NAME` = 'character'
-"""
-mycursor.execute(sql_query)
-for col in mycursor.fetchall():
-    print(col)
-#WORKS!!!!!!!!!!"
-
-
+def csv_format_check(csvfile):
+    print(csvfile[-3:].lower())
+    if csvfile[-3:].lower() != 'csv': raise Exception("Please use CSV format file")
+    else: print("Correct format of the file")
+#csv_format_check("testADD_CHARACTERS.csv")    
 
 def enter_characters(csvfile):
     pass
@@ -40,12 +39,12 @@ def read_csv(csvfile):
         headings = next(content)
         output = []
         for row in content:
-               output.append(row)
+            output.append(row)
     return(headings, output)
 
 lines_to_verify = read_csv("testADD_CHARACTERS.csv")
-print(lines_to_verify[0])
-print(*lines_to_verify[1])
+#print(lines_to_verify[0])
+#print(*lines_to_verify[1])
 
 """
 SELECT `COLUMN_NAME` 
@@ -53,7 +52,7 @@ FROM `INFORMATION_SCHEMA`.`COLUMNS`
 WHERE `TABLE_SCHEMA`='yourdatabasename' 
     AND `TABLE_NAME`='yourtablename';
 """
-WTcredentials.database
+
 
 '''
 INSERT INTO `storytool_test`.`character`
