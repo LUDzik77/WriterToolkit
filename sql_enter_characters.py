@@ -1,3 +1,7 @@
+# for most parts
+# instead of tests and/or unit tests basic  function calls 
+# are commented out below the definitions
+
 import mysql.connector
 import WTcredentials
 import csv
@@ -35,16 +39,43 @@ def read_csv(csvfile):
         content = csv.reader(file)
         headings = next(content)
         output = []
-        for row in content:
-            output.append(row)
+        for row in content: output.append(row)
     return(headings, output)
-lines_to_verify = read_csv("testADD_CHARACTERS.csv")
+csv_read = read_csv("testADD_CHARACTERS.csv")
 #print(lines_to_verify[0])
 #print(*lines_to_verify[1])
 
+def pair_actions(headings, lines):
+    temp, result = list(), list()
+    for line in lines: temp.append(zip(headings,line))
+    for line in temp: result.append(dict(tuple(line))) 
+    return(result)
+print(pair_actions(*csv_read))
+#[print(*pair) for pair in pair_actions(*csv_read)]
 
-def enter_characters(csvfile):
-    pass
+#def proceed_actions(pair_actions):
+    # 
+
+
+
+#def enter_characters(csvfile):
+    #sql_query = """
+    #INSERT INTO `storytool_test`.`character`
+    #(
+    #`first_name`,
+    #`family_name`,
+    #`nickname`,
+    #`principal`,
+    #`description`,
+    #`gender`,
+    #`skill`,
+    #`idea`,
+    #`saying`,
+    #`narrative`)
+    #VALUES ('Ludwik', 'Papaj', 'LUDzik', 1, '', 1, 'coding', 'capitalist', 'Allright', '');
+    #"""
+    #mycursor.execute(sql_query)
+    #db.commit()
 
 
 
