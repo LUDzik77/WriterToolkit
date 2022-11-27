@@ -5,7 +5,6 @@
 import mysql.connector
 import WTcredentials
 import csv
-import MySQLdb #for escape characters
 
 db = mysql.connector.connect(
     host = WTcredentials.host,
@@ -14,28 +13,6 @@ db = mysql.connector.connect(
     database= WTcredentials.database)
 
 mycursor = db.cursor()
-
-#instead   MySQLdb.escape_string(row[1]))  <--- in INSERT to test
-#https://www.programcreek.com/python/example/95347/MySQLdb.escape_string
-
-#def escape_characters(function):
-    #print("test1")
-    #def wrapper(*args, **kwargs):
-        #print("start")
-        #func = function(*args, **kwargs)
-        #add_escapes = [x.replace("`","") for x in func]
-        #print("end")
-        #return(add_escapes)
-    #return wrapper
-    
-def escape_characters(function):
-    print("test1")
-    def wrapper(*args, **kwargs):
-        print("start")
-        func = function(*args, **kwargs)
-        print("end")
-        return(MySQLdb.escape_string(func))
-    return wrapper    
 
 #to verify the basic excel spreeedsheet have columns as per  database
 def get_columns_names(table_name):
@@ -51,7 +28,6 @@ def get_columns_names(table_name):
     return([a[0] for a in list(mycursor)])
 #print(get_columns_names('character'))
 
-@escape_characters
 def get_columns_names_without(table_name, *column_name):
     result = get_columns_names(table_name)
     for col in column_name:
@@ -60,8 +36,10 @@ def get_columns_names_without(table_name, *column_name):
     return(result)
 print(get_columns_names_without('character', 'character_id'))
 
-
-
+def list_to_str_with_escape_characters(given_list):
+    result = str(tuple(given_list)).replace("'","`")
+    print(result)
+    return(result)
 
 def csv_format_check(csvfile):
     print(csvfile[-3:].lower())
@@ -111,20 +89,20 @@ def pair_actions(headings, lines):
 #enter_character({'ACTION': 'ADD', 'character_id': '', 'first_name': 'Łukasz', 'family_name': 'Sikora','nickname': 'Szeryf',\
                  #'principal': '1', 'description': 'tall, medium hair', 'gender': '1', 'skill': 'bjj', 'idea': 'centrism', 'saying': '', 'narrative': ''})
 
-#def enter_character(line_with_headings):
-    #sql_query = "INSERT INTO `storytool_test`.`character`"\
-        #+str(tuple(get_columns_names_without('character', 'character_id')))\
-        #+ " VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
-    #sql_values = list()
-    #for heading in get_columns_names_without('character', 'character_id'):
-        #sql_values.append(line_with_headings[heading])
-    ##print(sql_values)
-    ##print(len(sql_values))
-    #print(sql_query)
-    #mycursor.execute(sql_query, tuple(sql_values))
-    #db.commit()
-#enter_character({'ACTION': 'ADD', 'character_id': '', 'first_name': 'Łukasz', 'family_name': 'Sikora','nickname': 'Szeryf',\
-                 #'principal': '1', 'description': 'tall, medium hair', 'gender': '1', 'skill': 'bjj', 'idea': 'centrism', 'saying': '', 'narrative': ''})
+def enter_character(line_with_headings):
+    sql_query = "INSERT INTO `storytool_test`.`character`"\
+        +list_to_str_with_escape_characters(get_columns_names_without('character', 'character_id'))\
+        + " VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+    sql_values = list()
+    for heading in get_columns_names_without('character', 'character_id'):
+        sql_values.append(line_with_headings[heading])
+    #print(sql_values)
+    #print(len(sql_values))
+    print(sql_query)
+    mycursor.execute(sql_query, tuple(sql_values))
+    db.commit()
+enter_character({'ACTION': 'ADD', 'character_id': '', 'first_name': 'Łukasz', 'family_name': 'Sikora','nickname': 'Szeryf',\
+                 'principal': '1', 'description': 'tall, medium hair', 'gender': '1', 'skill': 'bjj', 'idea': 'centrism', 'saying': '', 'narrative': ''})
 
 
 

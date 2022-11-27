@@ -35,8 +35,10 @@ CREATE TABLE `character` (
   `idea` varchar(45) DEFAULT NULL,
   `saying` varchar(45) DEFAULT NULL,
   `narrative` mediumtext,
-  PRIMARY KEY (`character_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  PRIMARY KEY (`character_id`),
+  UNIQUE KEY `nickname_UNIQUE` (`nickname`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
 
 
 CREATE TABLE `character_relation` (
