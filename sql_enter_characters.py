@@ -5,7 +5,7 @@
 import mysql.connector
 import WTcredentials
 import csv
-#from functools import reduce
+import MySQLdb #for escape characters
 
 db = mysql.connector.connect(
     host = WTcredentials.host,
@@ -15,6 +15,28 @@ db = mysql.connector.connect(
 
 mycursor = db.cursor()
 
+#instead   MySQLdb.escape_string(row[1]))  <--- in INSERT to test
+#https://www.programcreek.com/python/example/95347/MySQLdb.escape_string
+
+#def escape_characters(function):
+    #print("test1")
+    #def wrapper(*args, **kwargs):
+        #print("start")
+        #func = function(*args, **kwargs)
+        #add_escapes = [x.replace("`","") for x in func]
+        #print("end")
+        #return(add_escapes)
+    #return wrapper
+    
+def escape_characters(function):
+    print("test1")
+    def wrapper(*args, **kwargs):
+        print("start")
+        func = function(*args, **kwargs)
+        print("end")
+        return(MySQLdb.escape_string(func))
+    return wrapper    
+
 #to verify the basic excel spreeedsheet have columns as per  database
 def get_columns_names(table_name):
     sql_query  =  """
@@ -22,11 +44,24 @@ def get_columns_names(table_name):
     FROM `INFORMATION_SCHEMA`.`COLUMNS`
     WHERE `TABLE_SCHEMA` = (%s)
     AND `TABLE_NAME` = (%s)
+    order by ORDINAL_POSITION;
     """
     sql_values = (db.database, table_name)
     mycursor.execute(sql_query, sql_values)
     return([a[0] for a in list(mycursor)])
 #print(get_columns_names('character'))
+
+@escape_characters
+def get_columns_names_without(table_name, *column_name):
+    result = get_columns_names(table_name)
+    for col in column_name:
+        result.remove(col)
+    print("func ended")
+    return(result)
+print(get_columns_names_without('character', 'character_id'))
+
+
+
 
 def csv_format_check(csvfile):
     print(csvfile[-3:].lower())
@@ -50,34 +85,46 @@ def pair_actions(headings, lines):
     for line in lines: temp.append(zip(headings,line))
     for line in temp: result.append(dict(tuple(line))) 
     return(result)
-print(pair_actions(*csv_read))
+#print(pair_actions(*csv_read))
 #[print(*pair) for pair in pair_actions(*csv_read)]
 
 #def proceed_actions(pair_actions):
     # 
 
 
-
-#def enter_characters(csvfile):
+  
+#def enter_character(line_with_headings):
     #sql_query = """
     #INSERT INTO `storytool_test`.`character`
-    #(
-    #`first_name`,
-    #`family_name`,
-    #`nickname`,
-    #`principal`,
-    #`description`,
-    #`gender`,
-    #`skill`,
-    #`idea`,
-    #`saying`,
-    #`narrative`)
-    #VALUES ('Ludwik', 'Papaj', 'LUDzik', 1, '', 1, 'coding', 'capitalist', 'Allright', '');
+    #(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+    #VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s);
     #"""
-    #mycursor.execute(sql_query)
+    #sql_columns = tuple(get_columns_names_without('character', 'character_id'))
+    #sql_values = list()
+    #for heading in get_columns_names_without('character', 'character_id'):
+        #sql_values.append(line_with_headings[heading])
+    #print(sql_columns+tuple(sql_values))
+    #print(len(sql_columns+tuple(sql_values)))
+    #result = (sql_columns+tuple(sql_values))
+    #mycursor.execute(sql_query, result, multi=True)
     #db.commit()
+#enter_character({'ACTION': 'ADD', 'character_id': '', 'first_name': 'Łukasz', 'family_name': 'Sikora','nickname': 'Szeryf',\
+                 #'principal': '1', 'description': 'tall, medium hair', 'gender': '1', 'skill': 'bjj', 'idea': 'centrism', 'saying': '', 'narrative': ''})
 
-
+#def enter_character(line_with_headings):
+    #sql_query = "INSERT INTO `storytool_test`.`character`"\
+        #+str(tuple(get_columns_names_without('character', 'character_id')))\
+        #+ " VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+    #sql_values = list()
+    #for heading in get_columns_names_without('character', 'character_id'):
+        #sql_values.append(line_with_headings[heading])
+    ##print(sql_values)
+    ##print(len(sql_values))
+    #print(sql_query)
+    #mycursor.execute(sql_query, tuple(sql_values))
+    #db.commit()
+#enter_character({'ACTION': 'ADD', 'character_id': '', 'first_name': 'Łukasz', 'family_name': 'Sikora','nickname': 'Szeryf',\
+                 #'principal': '1', 'description': 'tall, medium hair', 'gender': '1', 'skill': 'bjj', 'idea': 'centrism', 'saying': '', 'narrative': ''})
 
 
 
@@ -121,5 +168,14 @@ print(pair_actions(*csv_read))
 #mycursor.execute(sql_query)
 #db.commit()
 
+#TEST --->WORKS fine
+#sql_query = """
+#INSERT INTO `storytool_test`.`character`
+#(`first_name`, `family_name`, `nickname`, `principal`, `description`, `gender`, `skill`, `idea`, `saying`, `narrative`)
+#VALUES ('Łukasz', 'Sikora', 'Szeryf', '1', 'tall, medium hair', '1', 'bjj', 'centrism', '', '');
+#"""
+#mycursor.execute(sql_query)
+#db.commit()
 
-
+#(`first_name`, `family_name`, `nickname`, `principal`, `description`, `gender`, `skill`, `idea`, `saying`, `narrative`)
+#('first_name', 'family_name', 'nickname', 'principal', 'description', 'gender', 'skill', 'idea', 'saying', 'narrative')
