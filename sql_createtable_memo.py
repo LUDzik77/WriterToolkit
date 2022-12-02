@@ -33,7 +33,7 @@ CREATE TABLE `character` (
   `gender` int DEFAULT '0',
   `skill` varchar(45) DEFAULT NULL,
   `idea` varchar(45) DEFAULT NULL,
-  `saying` varchar(45) DEFAULT NULL,
+  `saying` mediumtext DEFAULT NULL,
   `narrative` mediumtext,
   PRIMARY KEY (`character_id`),
   UNIQUE KEY `nickname_UNIQUE` (`nickname`)
