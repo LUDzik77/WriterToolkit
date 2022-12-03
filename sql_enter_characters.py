@@ -36,15 +36,13 @@ def get_columns_names_without(table_name, *column_name):
     for col in column_name:
         result.remove(col)
     return(result)
-print(get_columns_names_without('character', 'character_id'))
+#print(get_columns_names_without('character', 'character_id'))
 
 def list_to_str_with_escape_characters(given_list):
     result = str(tuple(given_list)).replace("'","`")
-    print(result)
     return(result)
 
 def csv_format_check(csvfile):
-    print(csvfile[-3:].lower())
     if csvfile[-3:].lower() != 'csv': raise Exception("Please use CSV format file")
     else: print("Correct format of the file")
 #csv_format_check(USER_CSV)    
@@ -66,14 +64,6 @@ def pair_actions(headings, lines):
     for line in temp: result.append(dict(tuple(line))) 
     return(result)
 #print(pair_actions(*csv_read))
-[print(*pair) for pair in pair_actions(*csv_read)]
-
-def proceed_actions(pair_actions):
-    print(type(pair_actions))
-
-proceed_actions(pair_actions(*csv_read))
-
-  
 
 def enter_character(line_with_headings):
     sql_query = "INSERT INTO `storytool_test`.`character`"\
@@ -82,14 +72,19 @@ def enter_character(line_with_headings):
     sql_values = list()
     for heading in get_columns_names_without('character', 'character_id'):
         sql_values.append(line_with_headings[heading])
-    #print(sql_values)
-    #print(len(sql_values))
-    print(sql_query)
     mycursor.execute(sql_query, tuple(sql_values))
     db.commit()
 #test:
 #enter_character({'ACTION': 'ADD', 'character_id': '', 'first_name': 'Łukasz', 'family_name': 'Sikora','nickname': 'Szeryf',\
 #                 'principal': '1', 'description': 'tall, medium hair', 'gender': '1', 'skill': 'bjj', 'idea': 'centrism', 'saying': '', 'narrative': ''})
+
+def proceed_actions(pair_actions):
+    for line in pair_actions:
+        if line['ACTION']== "ADD":
+            enter_character(line)
+
+if __name__ == "__main__": 
+    proceed_actions(pair_actions(*csv_read))
 
 
 
