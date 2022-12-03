@@ -4,7 +4,7 @@
 
 import mysql.connector
 import WTcredentials
-import csv
+from csv_tools import read_csv_tool
 
 db = mysql.connector.connect(
     host = WTcredentials.host,
@@ -14,8 +14,16 @@ db = mysql.connector.connect(
 
 mycursor = db.cursor()
 
-#file to get data from
-USER_CSV = "testADD_CHARACTERS.csv"
+#temp test paths
+CHARACTERS_CSV = "testADD_CHARACTERS.csv"
+SCENES_CSV = "testADD_CHARACTERS.csv"
+CHAPTERS_CSV = "testADD_CHARACTERS.csv"
+BOOKS_CSV = "testADD_CHARACTERS.csv"
+          
+ADD_OR_MODIFY_CHARACTERS = read_csv_tool(CHARACTERS_CSV)
+ADD_OR_MODIFY_SCENES = read_csv_tool(SCENES_CSV)
+ADD_OR_MODIFY_CHAPTERS  = read_csv_tool(CHAPTERS_CSV)
+ADD_OR_MODIFY_BOOKS = read_csv_tool(BOOKS_CSV)
 
 #to verify the basic excel spreeedsheet have columns as per  database
 def get_columns_names(table_name):
@@ -42,28 +50,12 @@ def list_to_str_with_escape_characters(given_list):
     result = str(tuple(given_list)).replace("'","`")
     return(result)
 
-def csv_format_check(csvfile):
-    if csvfile[-3:].lower() != 'csv': raise Exception("Please use CSV format file")
-    else: print("Correct format of the file")
-#csv_format_check(USER_CSV)    
-
-def read_csv(csvfile):
-    with open(csvfile, 'r', encoding='utf-8') as file:
-        content = csv.reader(file)
-        headings = next(content)
-        output = []
-        for row in content: output.append(row)
-    return(headings, output)
-csv_read = read_csv(USER_CSV)
-#print(lines_to_verify[0])
-#print(*lines_to_verify[1])
-
 def pair_actions(headings, lines):
     temp, result = list(), list()
     for line in lines: temp.append(zip(headings,line))
     for line in temp: result.append(dict(tuple(line))) 
     return(result)
-#print(pair_actions(*csv_read))
+#print(pair_actions(*ADD_OR_MODIFY_CHARACTERS))
 
 def enter_character(line_with_headings):
     sql_query = "INSERT INTO `storytool_test`.`character`"\
@@ -77,6 +69,24 @@ def enter_character(line_with_headings):
 #enter_character({'ACTION': 'ADD', 'character_id': '', 'first_name': 'Łukasz', 'family_name': 'Sikora','nickname': 'Szeryf',\
 #                 'principal': '1', 'description': 'tall, medium hair', 'gender': '1', 'skill': 'bjj', 'idea': 'centrism', 'saying': '', 'narrative': ''})
 
+####/TODO
+####/TODO
+####/TODO
+####/TODO  --->#need to get change <proceed actions  and  filenames etc>
+def enter_book(line_with_headings):
+    sql_query = "INSERT INTO `storytool_test`.`book`"\
+        +list_to_str_with_escape_characters(get_columns_names_without('book'))\
+        + " VALUES (%s, %s, %s, %s)"
+    sql_values = list()
+    for heading in get_columns_names_without('book'):
+        sql_values.append(line_with_headings[heading])
+    print(sql_query)
+    print(sql_values)
+    mycursor.execute(sql_query, tuple(sql_values))
+    db.commit()
+enter_book({'ACTION': 'ADD', 'name': 'Dzieciaki', 'completed':'0', 'description':'sci-fi  novel', 'narrative':'' })
+
+
 def proceed_actions(pair_actions):
     for line in pair_actions:
         if line['ACTION']== "ADD":
@@ -87,7 +97,7 @@ def proceed_actions(pair_actions):
 
 
 if __name__ == "__main__": 
-    proceed_actions(pair_actions(*csv_read))
+    proceed_actions(pair_actions(*ADD_OR_MODIFY_CHARACTERS))
 
 
 
