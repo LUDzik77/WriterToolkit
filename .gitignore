@@ -1,6 +1,7 @@
 #GIT IGNORE LIST:
 
 /*.log
+/*.ods
 temp/
 /WTcredentials.py
 /IWT_main.py

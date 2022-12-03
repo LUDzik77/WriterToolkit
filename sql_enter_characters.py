@@ -74,7 +74,6 @@ def enter_character(line_with_headings):
         sql_values.append(line_with_headings[heading])
     mycursor.execute(sql_query, tuple(sql_values))
     db.commit()
-#test:
 #enter_character({'ACTION': 'ADD', 'character_id': '', 'first_name': 'Łukasz', 'family_name': 'Sikora','nickname': 'Szeryf',\
 #                 'principal': '1', 'description': 'tall, medium hair', 'gender': '1', 'skill': 'bjj', 'idea': 'centrism', 'saying': '', 'narrative': ''})
 
@@ -82,6 +81,10 @@ def proceed_actions(pair_actions):
     for line in pair_actions:
         if line['ACTION']== "ADD":
             enter_character(line)
+
+            
+
+
 
 if __name__ == "__main__": 
     proceed_actions(pair_actions(*csv_read))
