@@ -18,7 +18,7 @@ mycursor = db.cursor()
 CHARACTERS_CSV = "testADD_CHARACTERS.csv"
 SCENES_CSV = "testADD_CHARACTERS.csv"
 CHAPTERS_CSV = "testADD_CHARACTERS.csv"
-BOOKS_CSV = "testADD_CHARACTERS.csv"
+BOOKS_CSV = "ADD_BOOKS.csv"
           
 ADD_OR_MODIFY_CHARACTERS = read_csv_tool(CHARACTERS_CSV)
 ADD_OR_MODIFY_SCENES = read_csv_tool(SCENES_CSV)
@@ -69,10 +69,6 @@ def enter_character(line_with_headings):
 #enter_character({'ACTION': 'ADD', 'character_id': '', 'first_name': 'Łukasz', 'family_name': 'Sikora','nickname': 'Szeryf',\
 #                 'principal': '1', 'description': 'tall, medium hair', 'gender': '1', 'skill': 'bjj', 'idea': 'centrism', 'saying': '', 'narrative': ''})
 
-####/TODO
-####/TODO
-####/TODO
-####/TODO  --->#need to get change <proceed actions  and  filenames etc>
 def enter_book(line_with_headings):
     sql_query = "INSERT INTO `storytool_test`.`book`"\
         +list_to_str_with_escape_characters(get_columns_names_without('book'))\
@@ -84,7 +80,7 @@ def enter_book(line_with_headings):
     print(sql_values)
     mycursor.execute(sql_query, tuple(sql_values))
     db.commit()
-enter_book({'ACTION': 'ADD', 'name': 'Dzieciaki', 'completed':'0', 'description':'sci-fi  novel', 'narrative':'' })
+#enter_book({'ACTION': 'ADD', 'name': 'Dzieciaki', 'completed':'0', 'description':'sci-fi  novel', 'narrative':'' })
 
 
 def proceed_actions(pair_actions):
@@ -92,12 +88,19 @@ def proceed_actions(pair_actions):
         if line['ACTION']== "ADD":
             enter_character(line)
 
-            
 
+#functions for CLI scripting: /maybe we'll moto another file ? later on?/
+def characters():
+    proceed_actions(pair_actions(*ADD_OR_MODIFY_CHARACTERS))           
 
+def scenes():
+    proceed_actions(pair_actions(*ADD_OR_MODIFY_SCENES))
 
-if __name__ == "__main__": 
-    proceed_actions(pair_actions(*ADD_OR_MODIFY_CHARACTERS))
+def chapters():
+    proceed_actions(pair_actions(*ADD_OR_MODIFY_CHAPTERS))
+
+def books():
+    proceed_actions(pair_actions(*ADD_OR_MODIFY_BOOKS))
 
 
 
