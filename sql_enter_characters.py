@@ -83,24 +83,56 @@ def enter_book(line_with_headings):
 #enter_book({'ACTION': 'ADD', 'name': 'Dzieciaki', 'completed':'0', 'description':'sci-fi  novel', 'narrative':'' })
 
 
-def proceed_actions(pair_actions):
-    for line in pair_actions:
-        if line['ACTION']== "ADD":
-            enter_character(line)
+#def proceed_actions(pair_actions):
+   ## action
+    #for line in pair_actions:
+        #if line['ACTION'] in ("ADD", "add", "a", "A"):
+            #enter_character(line)
+        #if line['ACTION'] in ("MODIFY", "modify", "m", "M"):
+            #enter_character(line) 
+        #else: print("Only ADD or MODIFY as action are allowed")
+        
+#TODO
+#TODO
+#TODO
+#TODO
+#wrapper for the funcions  below? (does decorators works from CLI >???)
+def use_(func, paired_actions):
+    pass
 
-
-#functions for CLI scripting: /maybe we'll moto another file ? later on?/
+#functions for CLI scripting: /maybe we'll move to another file ? later on?/
 def characters():
-    proceed_actions(pair_actions(*ADD_OR_MODIFY_CHARACTERS))           
+    for line in pair_actions(*ADD_OR_MODIFY_CHARACTERS):
+        if line['ACTION'] in ("ADD", "add", "a", "A"):
+            enter_character(line)
+        if line['ACTION'] in ("MODIFY", "modify", "m", "M"):
+            enter_character(line) 
+        else: print("Only ADD or MODIFY as action are allowed")        
 
 def scenes():
-    proceed_actions(pair_actions(*ADD_OR_MODIFY_SCENES))
+    for line in pair_actions(*ADD_OR_MODIFY_SCENES):
+        if line['ACTION'] in ("ADD", "add", "a", "A"):
+            enter_scene(line)
+        if line['ACTION'] in ("MODIFY", "modify", "m", "M"):
+            enter_scene(line)  
+        else: print("Only ADD or MODIFY as action are allowed")      
+
 
 def chapters():
-    proceed_actions(pair_actions(*ADD_OR_MODIFY_CHAPTERS))
+    for line in pair_actions(*ADD_OR_MODIFY_CHAPTERS):
+        if line['ACTION'] in ("ADD", "add", "a", "A"):
+            enter_chapter(line)
+        if line['ACTION'] in ("MODIFY", "modify", "m", "M"):
+            enter_chapter(line)  
+        else: print("Only ADD or MODIFY as action are allowed")  
 
 def books():
-    proceed_actions(pair_actions(*ADD_OR_MODIFY_BOOKS))
+    for line in pair_actions(*ADD_OR_MODIFY_BOOKS):
+        if line['ACTION'] in ("ADD", "add", "a", "A"):
+            enter_book(line)
+        if line['ACTION'] in ("MODIFY", "modify", "m", "M"):
+            enter_book(line)  
+        else: print("Only ADD or MODIFY as action are allowed")  
 
 
 
