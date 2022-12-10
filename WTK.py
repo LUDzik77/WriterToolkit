@@ -17,7 +17,7 @@ mycursor = db.cursor()
 #temp test paths
 CHARACTERS_CSV = "testADD_CHARACTERS.csv"
 SCENES_CSV = "testADD_CHARACTERS.csv"
-CHAPTERS_CSV = "testADD_CHARACTERS.csv"
+CHAPTERS_CSV = "ADD_CHAPTERS.csv"
 BOOKS_CSV = "ADD_BOOKS.csv"
           
 ADD_OR_MODIFY_CHARACTERS = read_csv_tool(CHARACTERS_CSV)
@@ -57,6 +57,11 @@ def pair_actions(headings, lines):
     return(result)
 #print(pair_actions(*ADD_OR_MODIFY_CHARACTERS))
 
+def execute_commit(sql_query, sql_values):
+    mycursor.execute(sql_query, sql_values)
+    db.commit()
+    print(f"entered {sql_values}")
+    
 def enter_character(line_with_headings):
     sql_query = "INSERT INTO `storytool_test`.`character`"\
         +list_to_str_with_escape_characters(get_columns_names_without('character', 'character_id'))\
@@ -64,8 +69,7 @@ def enter_character(line_with_headings):
     sql_values = list()
     for heading in get_columns_names_without('character', 'character_id'):
         sql_values.append(line_with_headings[heading])
-    mycursor.execute(sql_query, tuple(sql_values))
-    db.commit()
+    execute_commit(sql_query, tuple(sql_values))
 #enter_character({'ACTION': 'ADD', 'character_id': '', 'first_name': 'Łukasz', 'family_name': 'Sikora','nickname': 'Szeryf',\
 #                 'principal': '1', 'description': 'tall, medium hair', 'gender': '1', 'skill': 'bjj', 'idea': 'centrism', 'saying': '', 'narrative': ''})
 
@@ -76,44 +80,42 @@ def enter_book(line_with_headings):
     sql_values = list()
     for heading in get_columns_names_without('book'):
         sql_values.append(line_with_headings[heading])
-    print(sql_query)
-    print(sql_values)
-    mycursor.execute(sql_query, tuple(sql_values))
-    db.commit()
+    execute_commit(sql_query, tuple(sql_values))
 #enter_book({'ACTION': 'ADD', 'name': 'Dzieciaki', 'completed':'0', 'description':'sci-fi  novel', 'narrative':'' })
 
+def enter_chapter(line_with_headings):
+    sql_query = "INSERT INTO `storytool_test`.`chapter`"\
+        +list_to_str_with_escape_characters(get_columns_names_without('chapter'))\
+        + " VALUES (%s, %s, %s, %s, %s, %s, %s)"
+    sql_values = list()
+    for heading in get_columns_names_without('chapter'):
+        sql_values.append(line_with_headings[heading])
+    execute_commit(sql_query, tuple(sql_values))
+    
 
-#def proceed_actions(pair_actions):
-   ## action
-    #for line in pair_actions:
-        #if line['ACTION'] in ("ADD", "add", "a", "A"):
-            #enter_character(line)
-        #if line['ACTION'] in ("MODIFY", "modify", "m", "M"):
-            #enter_character(line) 
-        #else: print("Only ADD or MODIFY as action are allowed")
         
 #TODO
 #TODO
 #TODO
 #TODO
 #wrapper for the funcions  below? (does decorators works from CLI >???)
-def use_(func, paired_actions):
-    pass
+#def use_(func, paired_actions):
+    #pass
 
 #functions for CLI scripting: /maybe we'll move to another file ? later on?/
 def characters():
     for line in pair_actions(*ADD_OR_MODIFY_CHARACTERS):
         if line['ACTION'] in ("ADD", "add", "a", "A"):
             enter_character(line)
-        if line['ACTION'] in ("MODIFY", "modify", "m", "M"):
+        elif line['ACTION'] in ("MODIFY", "modify", "m", "M"):
             enter_character(line) 
         else: print("Only ADD or MODIFY as action are allowed")        
-
+        
 def scenes():
     for line in pair_actions(*ADD_OR_MODIFY_SCENES):
         if line['ACTION'] in ("ADD", "add", "a", "A"):
             enter_scene(line)
-        if line['ACTION'] in ("MODIFY", "modify", "m", "M"):
+        elif line['ACTION'] in ("MODIFY", "modify", "m", "M"):
             enter_scene(line)  
         else: print("Only ADD or MODIFY as action are allowed")      
 
@@ -122,7 +124,7 @@ def chapters():
     for line in pair_actions(*ADD_OR_MODIFY_CHAPTERS):
         if line['ACTION'] in ("ADD", "add", "a", "A"):
             enter_chapter(line)
-        if line['ACTION'] in ("MODIFY", "modify", "m", "M"):
+        elif line['ACTION'] in ("MODIFY", "modify", "m", "M"):
             enter_chapter(line)  
         else: print("Only ADD or MODIFY as action are allowed")  
 
@@ -130,11 +132,11 @@ def books():
     for line in pair_actions(*ADD_OR_MODIFY_BOOKS):
         if line['ACTION'] in ("ADD", "add", "a", "A"):
             enter_book(line)
-        if line['ACTION'] in ("MODIFY", "modify", "m", "M"):
+        elif line['ACTION'] in ("MODIFY", "modify", "m", "M"):
             enter_book(line)  
         else: print("Only ADD or MODIFY as action are allowed")  
 
-
+chapters()
 
 #sql_query = """
 #INSERT INTO `storytool_test`.`character`
