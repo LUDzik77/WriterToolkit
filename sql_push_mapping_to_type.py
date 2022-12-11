@@ -1,5 +1,4 @@
 import mysql.connector
-from datetime import datetime
 import WTcredentials
 
 db = mysql.connector.connect(
@@ -29,8 +28,8 @@ sql_values = [
     (55,'CONSUMMATION'),
     (56,'AFTERMATH'),
     (12,'MYSTERY'),
-    (33, 'LEADER'),
-    (34, 'ABDICATE')
+    (33,'LEADER'),
+    (34,'ABDICATE')
 ]
 
 mycursor.executemany(sql_query, sql_values)

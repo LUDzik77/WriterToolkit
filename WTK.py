@@ -91,101 +91,30 @@ def enter_chapter(line_with_headings):
     for heading in get_columns_names_without('chapter'):
         sql_values.append(line_with_headings[heading])
     execute_commit(sql_query, tuple(sql_values))
-    
 
-        
-#TODO
-#TODO
-#TODO
-#TODO
-#wrapper for the funcions  below? (does decorators works from CLI >???)
-#def use_(func, paired_actions):
-    #pass
+def map_and_execute(file, func_add, func_modify):
+    for line in pair_actions(*file):
+        if line['ACTION'] in ("ADD", "add", "a", "A", "+"): func_add(line)
+        elif line['ACTION'] in ("MODIFY", "modify", "m", "M"): func_modify(line) 
+        else: print("Only ADD or MODIFY as action are allowed")   
 
-#functions for CLI scripting: /maybe we'll move to another file ? later on?/
+def truncate_table(table_name_with_escape_symbols):
+    mycursor.execute(f"TRUNCATE `storytool_test`.{table_name_with_escape_symbols};")
+    print(f"{table_name_with_escape_symbols} db was truncated ") 
+
 def characters():
-    for line in pair_actions(*ADD_OR_MODIFY_CHARACTERS):
-        if line['ACTION'] in ("ADD", "add", "a", "A"):
-            enter_character(line)
-        elif line['ACTION'] in ("MODIFY", "modify", "m", "M"):
-            enter_character(line) 
-        else: print("Only ADD or MODIFY as action are allowed")        
-        
-def scenes():
-    for line in pair_actions(*ADD_OR_MODIFY_SCENES):
-        if line['ACTION'] in ("ADD", "add", "a", "A"):
-            enter_scene(line)
-        elif line['ACTION'] in ("MODIFY", "modify", "m", "M"):
-            enter_scene(line)  
-        else: print("Only ADD or MODIFY as action are allowed")      
+    map_and_execute(ADD_OR_MODIFY_CHARACTERS, enter_character, enter_character)     
+    truncate_table("`character`")
 
+def scenes():
+    map_and_execute(ADD_OR_MODIFY_SCENES, enter_scene, enter_scene)
+    truncate_table("`scene`")
 
 def chapters():
-    for line in pair_actions(*ADD_OR_MODIFY_CHAPTERS):
-        if line['ACTION'] in ("ADD", "add", "a", "A"):
-            enter_chapter(line)
-        elif line['ACTION'] in ("MODIFY", "modify", "m", "M"):
-            enter_chapter(line)  
-        else: print("Only ADD or MODIFY as action are allowed")  
+    map_and_execute(ADD_OR_MODIFY_CHAPTERS, enter_chapter, enter_chapter)
+    truncate_table("`chapter`")
 
 def books():
-    for line in pair_actions(*ADD_OR_MODIFY_BOOKS):
-        if line['ACTION'] in ("ADD", "add", "a", "A"):
-            enter_book(line)
-        elif line['ACTION'] in ("MODIFY", "modify", "m", "M"):
-            enter_book(line)  
-        else: print("Only ADD or MODIFY as action are allowed")  
+    map_and_execute(ADD_OR_MODIFY_BOOKS, enter_book, enter_book)
+    truncate_table("`book`")
 
-chapters()
-
-#sql_query = """
-#INSERT INTO `storytool_test`.`character`
-#(`character_id`,
-#`first_name`,
-#`family_name`,
-#`nickname`,
-#`principal`,
-#`description`,
-#`gender`,
-#`skill`,
-#`idea`,
-#`saying`,
-#`narrative`)
-#VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);
-#"""
-#sql_values = lines_to_verify[1][0]
-#print(lines_to_verify[1][0][1:])
-#mycursor.execute(sql_query, sql_values)
-#db.commit()
-
-
-#TEST --->WORKS fine
-#sql_query = """
-#INSERT INTO `storytool_test`.`character`
-#(
-#`first_name`,
-#`family_name`,
-#`nickname`,
-#`principal`,
-#`description`,
-#`gender`,
-#`skill`,
-#`idea`,
-#`saying`,
-#`narrative`)
-#VALUES ('Ludwik', 'Papaj', 'LUDzik', 1, '', 1, 'coding', 'capitalist', 'Allright', '');
-#"""
-#mycursor.execute(sql_query)
-#db.commit()
-
-#TEST --->WORKS fine
-#sql_query = """
-#INSERT INTO `storytool_test`.`character`
-#(`first_name`, `family_name`, `nickname`, `principal`, `description`, `gender`, `skill`, `idea`, `saying`, `narrative`)
-#VALUES ('Łukasz', 'Sikora', 'Szeryf', '1', 'tall, medium hair', '1', 'bjj', 'centrism', '', '');
-#"""
-#mycursor.execute(sql_query)
-#db.commit()
-
-#(`first_name`, `family_name`, `nickname`, `principal`, `description`, `gender`, `skill`, `idea`, `saying`, `narrative`)
-#('first_name', 'family_name', 'nickname', 'principal', 'description', 'gender', 'skill', 'idea', 'saying', 'narrative')
