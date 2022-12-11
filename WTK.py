@@ -98,13 +98,27 @@ def map_and_execute(file, func_add, func_modify):
         elif line['ACTION'] in ("MODIFY", "modify", "m", "M"): func_modify(line) 
         else: print("Only ADD or MODIFY as action are allowed")   
 
+#TODO list:
+#TODO list:            
+#TODO list:
+#sql transaction_log to be use somehow for the user
+#edition of excel with IDs (YES)
+
+
 def truncate_table(table_name_with_escape_symbols):
     mycursor.execute(f"TRUNCATE `storytool_test`.{table_name_with_escape_symbols};")
-    print(f"{table_name_with_escape_symbols} db was truncated ") 
+    print(f"{table_name_with_escape_symbols} TABLE was truncated ") 
 
 def characters():
     map_and_execute(ADD_OR_MODIFY_CHARACTERS, enter_character, enter_character)     
-    truncate_table("`character`")
+    #truncate_table("`character`")
+#characters()
+
+#return name+surname+nickname : idnr ... maybe it can save it to the excel ?
+def charactersID():
+    mycursor.execute("SELECT character_id, first_name, family_name, nickname  FROM storytool_test.`character`;")
+    for row in mycursor: print(row)
+#charactersID()
 
 def scenes():
     map_and_execute(ADD_OR_MODIFY_SCENES, enter_scene, enter_scene)
