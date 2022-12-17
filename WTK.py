@@ -71,7 +71,26 @@ def enter_character(line_with_headings):
         sql_values.append(line_with_headings[heading])
     execute_commit(sql_query, tuple(sql_values))
 #enter_character({'ACTION': 'ADD', 'character_id': '', 'first_name': 'Łukasz', 'family_name': 'Sikora','nickname': 'Szeryf',\
-#                 'principal': '1', 'description': 'tall, medium hair', 'gender': '1', 'skill': 'bjj', 'idea': 'centrism', 'saying': '', 'narrative': ''})
+# 'principal': '1', 'description': 'tall, medium hair', 'gender': '1', 'skill': 'bjj', 'idea': 'centrism', 'saying': '', 'narrative': ''})
+
+#work in progress DELATE + INSERT  instead of UPDATE
+def modify_character(line_with_headings):
+    sql_query1 ="DELETE FROM `storytool_test`.`character`WHERE character_id=(%s);";   
+    sql_query2 = "INSERT INTO `storytool_test`.`character`"\
+        +list_to_str_with_escape_characters(get_columns_names_without('character'))\
+        + " VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+    sql_values = list()
+    for heading in get_columns_names_without('character'):
+        sql_values.append(line_with_headings[heading])
+    execute_commit(sql_query1, tuple(line_with_headings['character_id']))
+    execute_commit(sql_query2, tuple(sql_values))
+modify_character({'ACTION': 'M', 'character_id': '1', 'first_name': 'ŁukaszCHANGED', 'family_name': 'SikoraCHANGED','nickname': 'SzeryfCHANGED',\
+                'principal': '1', 'description': 'tall, medium hair', 'gender': '1', 'skill': 'bjj', 'idea': 'centrism', 'saying': '', 'narrative': ''})
+
+#UPDATE Customers
+#SET ContactName = 'Alfred Schmidt', City= 'Frankfurt'
+#WHERE CustomerID = 1;
+
 
 def enter_book(line_with_headings):
     sql_query = "INSERT INTO `storytool_test`.`book`"\
@@ -107,9 +126,11 @@ def map_and_execute(file, func_add, func_modify):
 
 def truncate_table(table_name_with_escape_symbols):
     mycursor.execute(f"TRUNCATE `storytool_test`.{table_name_with_escape_symbols};")
+    db.commit()
     print(f"{table_name_with_escape_symbols} TABLE was truncated ") 
 
 def characters():
+    truncate_table("`character`")
     map_and_execute(ADD_OR_MODIFY_CHARACTERS, enter_character, enter_character)     
     #truncate_table("`character`")
 #characters()
