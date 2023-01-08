@@ -1,43 +1,54 @@
 #!/bin/bash
 
-# Check if the first argument is "add" or "remove"
+# ---> it works  cat test.txt |grep "$1"
+
+dir="WTK"
+if [ ! -d "$dir" ]; then
+  mkdir "$dir"
+fi
+  
 if [ "$1" == "add" ]; then
-  # Check if a name was provided
-  if [ -z "$2" ]; then
-    echo "Error: No name provided"
+  if [ -z "$2" ]; then echo "Error: No name provided"
   else
-    # Check if a feature was provided
-    if [ -z "$3" ]; then
-      echo "Error: No feature provided"
+    if [ -z "$3" ]; then echo "Error: No feature provided"
     else
-      # Check if the name already exists in the file
-      grep -q "$2" names.txt
-      if [ $? -eq 0 ]; then
-        # Name already exists, append feature to the existing line
-        sed -i "s/$2.*/$2 $3/g" names.txt
-      else
-        # Name does not exist, add new line with name and feature
-        echo "$2 $3" >> names.txt
-      fi
-      echo "Added $3 to $2 in the names file"
+    touch "$dir/$2.txt"
+      echo "$2 $3" >> "$dir/$2.txt"
+      echo "Added $3 to $2"
     fi
   fi
+  
 elif [ "$1" == "remove" ]; then
-  # Check if a name was provided
-  if [ -z "$2" ]; then
-    echo "Error: No name provided"
+  if [ -z "$2" ]; then echo "Error: No name provided"
   else
-    # Check if a feature was provided
-    if [ -z "$3" ]; then
-      # No feature provided, remove entire line with name
-      sed -i "/$2/d" names.txt
-      echo "Removed $2 from the names file"
+    if [ -z "$3" ]; then sed -i "/$2/d" "$dir/$2.txt"
+      echo "$2 removed"
     else
-      # Feature provided, remove only the specified feature from the line
-      sed -i "s/$2 $3/ /g" names.txt
-      echo "Removed $3 from $2 in the names file"
+      sed -i "s/$2 $3/ /g" "$dir/$2.txt"
+      echo "Removed $3 from $2"
     fi
   fi
+
+
+elif [ "$1" == "read" ]; then  
+  if [ -z "$2" ]; then
+    for file in "$dir"/*; do
+    #echo "File: $file"
+    cat "$file"
+    echo "---"
+done
+  else
+    echo "here to change"
+
+  fi
+
 else
   echo "Error: Invalid command"
 fi
+
+
+
+
+# to look for 6 first characters of the feature>>
+#first_6_chars=$(echo "$3" | cut -c 1-6)
+#grep -q "$2 $first_6_chars" names.txt
