@@ -7,9 +7,6 @@ dir="WTK"
 if [ ! -d "$dir" ]; then
   mkdir "$dir"
 fi
-
-
-grep -nr 'n*' 
   
 if [ "$1" == "add" ]; then
   if [ -z "$2" ]; then echo "Error: No name provided"
@@ -37,14 +34,19 @@ elif [ "$1" == "remove" ]; then
 elif [ "$1" == "read" ]; then  
   if [ -z "$2" ]; then
     for file in "$dir"/*; do
-    #echo "File: $file"
     cat "$file"
     echo "---"
-done
-  else
-    echo "here to change"
-
+    done
   fi
+  
+ #that part does not work
+ 
+elif ["$2"]; then 
+  if ["$2.txt" in "$dir"/*]; then
+    cat "$dir/$2.txt"
+    echo "---"
+  fi
+  
 
 else
   echo "Error: Invalid command"
