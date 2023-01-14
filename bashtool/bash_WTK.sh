@@ -1,11 +1,15 @@
 #!/bin/bash
 
 # ---> it works  cat test.txt |grep "$1"
+# ---> grep -hnr 'line' ./$dir/
 
 dir="WTK"
 if [ ! -d "$dir" ]; then
   mkdir "$dir"
 fi
+
+
+grep -nr 'n*' 
   
 if [ "$1" == "add" ]; then
   if [ -z "$2" ]; then echo "Error: No name provided"
